@@ -4,10 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.drovo.cryptothemoney.R
 import com.drovo.cryptothemoney.databinding.CurrencyItemLayoutBinding
+import com.drovo.cryptothemoney.fragments.HomeFragmentDirections
 import com.drovo.cryptothemoney.models.CryptoCurrency
 
 class MarketAdapter constructor(
@@ -49,6 +51,13 @@ class MarketAdapter constructor(
             "https://s3.coinmarketcap.com/generated/sparklines/web/7d/usd/"+item.id+".png"
         ).thumbnail(Glide.with(context).load(R.drawable.spinner))
             .into(holder.binding.currencyChartImageView)
+
+        //pass data from Home fragment(top gainers and top losers) to Details fragment
+        holder.itemView.setOnClickListener {
+            findNavController(it).navigate(
+                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item)
+            )
+        }
     }
 
     override fun getItemCount(): Int {
