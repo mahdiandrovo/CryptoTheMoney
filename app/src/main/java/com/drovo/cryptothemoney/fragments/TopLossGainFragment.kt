@@ -20,7 +20,9 @@ import java.util.Collections
 import java.util.stream.Collectors
 
 class TopLossGainFragment : Fragment() {
+
     private lateinit var bindind: FragmentTopLossGainBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,13 +56,13 @@ class TopLossGainFragment : Fragment() {
                         for (i in 0..9){
                             list.add(dataItem[i])
                         }
-                        bindind.topGainLoseRecyclerView.adapter = MarketAdapter(requireContext(), list)
+                        bindind.topGainLoseRecyclerView.adapter = MarketAdapter(requireContext(), list, "home")
                     }else{
                         list.clear()
                         for (i in 0..9){
                             list.add(dataItem[dataItem.size-1-i])
                         }
-                        bindind.topGainLoseRecyclerView.adapter = MarketAdapter(requireContext(), list)
+                        bindind.topGainLoseRecyclerView.adapter = MarketAdapter(requireContext(), list, "home")
                     }
                 }
             }

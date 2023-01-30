@@ -10,15 +10,22 @@ import com.bumptech.glide.Glide
 import com.drovo.cryptothemoney.R
 import com.drovo.cryptothemoney.databinding.CurrencyItemLayoutBinding
 import com.drovo.cryptothemoney.fragments.HomeFragmentDirections
+import com.drovo.cryptothemoney.fragments.MarketFragmentDirections
 import com.drovo.cryptothemoney.models.CryptoCurrency
 
 class MarketAdapter constructor(
     var context: Context,
-    var list: List<CryptoCurrency>
+    var list: List<CryptoCurrency>,
+    var type: String
 ): RecyclerView.Adapter<MarketAdapter.MarketViewHolder>(){
 
     inner class MarketViewHolder(view: View): RecyclerView.ViewHolder(view){
         var binding = CurrencyItemLayoutBinding.bind(view)
+    }
+
+    fun updateData(dataItem: List<CryptoCurrency>){
+        list = dataItem
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarketViewHolder {
@@ -54,9 +61,16 @@ class MarketAdapter constructor(
 
         //pass data from Home fragment(top gainers and top losers) to Details fragment
         holder.itemView.setOnClickListener {
-            findNavController(it).navigate(
-                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item)
-            )
+            if (type == "home"){
+                findNavController(it).navigate(
+                    HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item)
+                )
+            } else if (type == "market"){
+                findNavController(it).navigate(
+                    MarketFragmentDirections.actionMarketFragmentToDetailsFragment(item)
+                )
+            }
+
         }
     }
 
