@@ -7,11 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.*
 import com.drovo.cryptothemoney.R
+import com.drovo.cryptothemoney.adapter.TopLossGainAdapter
 import com.drovo.cryptothemoney.adapter.TopMarketAdapter
 import com.drovo.cryptothemoney.api.ApiInterface
 import com.drovo.cryptothemoney.api.ApiUtilities
 import com.drovo.cryptothemoney.databinding.FragmentHomeBinding
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,7 +30,37 @@ class HomeFragment : Fragment() {
 
         getTopCurrencyList()
 
+        setTabLayout()
+
         return binding.root
+    }
+
+    private fun setTabLayout() {
+        val adapter = TopLossGainAdapter(this)
+        binding.contentViewPager.adapter = adapter
+
+        binding.contentViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (position == 0){
+                    binding.topGainIndicator.visibility = VISIBLE
+                    binding.topLoseIndicator.visibility = GONE
+                }else{
+                    binding.topGainIndicator.visibility = GONE
+                    binding.topLoseIndicator.visibility = VISIBLE
+                }
+            }
+        })
+
+        TabLayoutMediator(binding.tabLayout, binding.contentViewPager){
+            tab, position->
+            var title = if (position == 0){
+                "Top Gainers"
+            }else{
+                "Top Losers"
+            }
+            tab.text = title
+        }.attach()
     }
 
     private fun getTopCurrencyList() {
@@ -37,9 +71,6 @@ class HomeFragment : Fragment() {
             withContext(Dispatchers.Main){
                 binding.topCurrencyRecyclerView.adapter = TopMarketAdapter(requireContext(), result.getMarketData().body()!!.data.cryptoCurrencyList)
             }
-
-
-            Log.d("MyImportantData", "getTopCurrencyList: ${result.getMarketData().body()!!.data.cryptoCurrencyList}")
         }
     }
 }
