@@ -12,10 +12,5 @@
         android:icon="@drawable/ic_market"
         android:title="Market"
         app:showAsAction="always"/>
-    <item android:id="@+id/watchListFragment"
-        android:enabled="true"
-        android:icon="@drawable/ic_bookmark"
-        android:title="WatchList"
-        app:showAsAction="always"/>
 
 </menu>
